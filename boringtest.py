@@ -49,7 +49,7 @@ class NeuralNet(nn.Module):
         self.fc1 = nn.Linear(input_size, 400) 
         self.sigmoid = nn.Sigmoid()
 
-        self.tks0 = TopK_custom(600, max_iter=50)
+        self.tks0 = TopK_custom(100, max_iter=50)
         self.tks1 = TopK_custom(350, max_iter=50)
         self.tks2 = TopK_custom(250, max_iter=50)
         self.tks3 = TopK_custom(150, max_iter=50)
@@ -71,7 +71,7 @@ class NeuralNet(nn.Module):
         return dsc_indx.float()
     def forward(self, x):
         
-        x = self.tks0(x) * x
+        x = (1 - self.tks0(x)) * x
         out = self.fc1(x)
         out = self.sigmoid(out)
         #out = out * self.tks1(out)
