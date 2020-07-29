@@ -97,7 +97,7 @@ class SoftSort():
         size = len(self.values)
         print(size)
         input_w = torch.arange(
-            1, size + 1)[::-1] / self.regularization_strength
+            start=1, end=size + 1)[::-1] / self.regularization_strength
         values = self.sign * self.values
         self.permutation_ = torch.argsort(values)[::-1]
         s = values[self.permutation_]
