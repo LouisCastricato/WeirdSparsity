@@ -47,9 +47,9 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size) 
         self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(200, hidden_size) 
-        self.fc3 = nn.Linear(200, hidden_size) 
-        self.fc4 = nn.Linear(200, num_classes)  
+        self.fc2 = nn.Linear(hidden_size, hidden_size) 
+        self.fc3 = nn.Linear(hidden_size, hidden_size) 
+        self.fc4 = nn.Linear(hidden_size, num_classes)  
     def sort_back_to_vec(self, inp):
         #zeros vector
         zrs = torch.zeros((batch_size, 200)).cuda()
