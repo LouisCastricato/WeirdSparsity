@@ -48,7 +48,7 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size) 
         self.relu = nn.ReLU()
-        self.tks = TopK_stablized(200)
+        self.tks = TopK_stablized(200, max_iter=50)
 
         self.fc2 = nn.Linear(hidden_size, hidden_size) 
         self.fc3 = nn.Linear(hidden_size, hidden_size) 
