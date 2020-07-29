@@ -21,7 +21,7 @@ hidden_size = 500
 num_classes = 10
 num_epochs = 10
 batch_size = 100
-learning_rate = 0.0001
+learning_rate = 0.001
 
 # MNIST dataset 
 train_dataset = torchvision.datasets.MNIST(root='../../data', 
@@ -48,7 +48,7 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size) 
         self.relu = nn.ReLU()
-        self.tks = TopK_custom(400, max_iter=50)
+        self.tks = TopK_custom(450, max_iter=50)
 
         self.fc2 = nn.Linear(hidden_size, hidden_size) 
         self.fc3 = nn.Linear(hidden_size, hidden_size) 
