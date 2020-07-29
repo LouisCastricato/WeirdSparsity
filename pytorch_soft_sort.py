@@ -142,5 +142,5 @@ class SS_Func(torch.autograd.Function):
 
 def soft_sort_pytorch(values, direction="ASCENDING",\
     regularization_strength=1.0, regularization="l2"):
-    return map_tensor(SS_Func.apply, values)
+    return SS_Func.apply(values)
 
