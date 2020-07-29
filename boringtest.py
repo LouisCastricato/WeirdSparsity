@@ -18,9 +18,9 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 input_size = 784
 hidden_size = 500
 num_classes = 10
-num_epochs = 5
+num_epochs = 10
 batch_size = 100
-learning_rate = 0.001
+learning_rate = 0.0001
 
 # MNIST dataset 
 train_dataset = torchvision.datasets.MNIST(root='../../data', 
@@ -64,15 +64,15 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         
         out = self.fc1(x)
-        #out = out * sparsemax(out)
+        out = out * sparsemax(out)
         out = self.relu(out)
 
         out = self.fc2(out)
-        #out = out * sparsemax(out) 
+        out = out * sparsemax(out) 
         out = self.relu(out)
 
         out = self.fc3(out)
-        #out = out * sparsemax(out) 
+        out = out * sparsemax(out) 
         out = self.relu(out)
 
         out = self.fc4(out)
