@@ -56,8 +56,8 @@ class NeuralNet(nn.Module):
         self.tks2 = TopK_custom(400, max_iter=50)
         self.tks3 = TopK_custom(400, max_iter=50)
 
-        self.fc2 = nn.Linear(hidden_size, 300) 
-        self.fc3 = nn.Linear(hidden_size, 200) 
+        self.fc2 = nn.Linear(hidden_size, hidden_size) 
+        self.fc3 = nn.Linear(hidden_size, hidden_size) 
         self.fc4 = nn.Linear(hidden_size, num_classes)
 
     def sort_back_to_vec(self, inp):
