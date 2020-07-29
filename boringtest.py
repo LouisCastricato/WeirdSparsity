@@ -10,7 +10,8 @@ from fast_soft_sort.numpy_ops import rank, sort
 from pytorch_soft_sort import soft_sort_pytorch
 import sys
 from tqdm import tqdm
-from entmax import entmax15, sparsemax, entmax_bisect
+from entmax import entmax15, sparsemax
+from sinkhorn.topk import TopK_stablized
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -20,7 +21,7 @@ hidden_size = 500
 num_classes = 10
 num_epochs = 10
 batch_size = 100
-learning_rate = 0.0001
+learning_rate = 0.001
 
 # MNIST dataset 
 train_dataset = torchvision.datasets.MNIST(root='../../data', 
@@ -47,6 +48,8 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size) 
         self.relu = nn.ReLU()
+        self.tks = TopK_stablized(hidden_size-100)
+
         self.fc2 = nn.Linear(hidden_size, hidden_size) 
         self.fc3 = nn.Linear(hidden_size, hidden_size) 
         self.fc4 = nn.Linear(hidden_size, num_classes)  
@@ -64,15 +67,15 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         
         out = self.fc1(x)
-        out = out * sparsemax(out)
+        out = out * self.tks(out)
         out = self.relu(out)
 
         out = self.fc2(out)
-        out = out * sparsemax(out) 
+        out = out * self.tks(out) 
         out = self.relu(out)
 
         out = self.fc3(out)
-        out = out * sparsemax(out) 
+        out = out * self.tks(out) 
         out = self.relu(out)
 
         out = self.fc4(out)
