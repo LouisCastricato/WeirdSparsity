@@ -7,6 +7,7 @@ import torchvision.transforms as transforms
 
 from fast_soft_sort.pytorch_ops import soft_rank, soft_sort
 from fast_soft_sort.numpy_ops import rank, sort
+from pytorch_soft_sort import soft_sort_pytorch
 import sys
 from tqdm import tqdm
 # Device configuration
@@ -52,7 +53,7 @@ class NeuralNet(nn.Module):
         #zeros vector
         zrs = torch.zeros((batch_size, 200)).cuda()
         #Get the descending indexes
-        dsc_indx = soft_sort(inp.view(batch_size, -1).cpu(), "DESCENDING").cuda()
+        dsc_indx = soft_sort_pytorch(inp.view(batch_size, -1))
         _, indices = torch.sort(inp, descending=True)
         dsc_indx = dsc_indx.narrow(-1, 0, 200)
         
