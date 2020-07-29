@@ -46,13 +46,17 @@ test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
 class NeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
         super(NeuralNet, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size) 
+        self.fc1 = nn.Linear(input_size, 400) 
         self.relu = nn.ReLU()
-        self.tks = TopK_custom(450, max_iter=50)
 
-        self.fc2 = nn.Linear(hidden_size, hidden_size) 
-        self.fc3 = nn.Linear(hidden_size, hidden_size) 
-        self.fc4 = nn.Linear(hidden_size, num_classes)  
+        self.tks1 = TopK_custom(350, max_iter=50)
+        self.tks2 = TopK_custom(250, max_iter=50)
+        self.tks3 = TopK_custom(150, max_iter=50)
+
+        self.fc2 = nn.Linear(400, 300) 
+        self.fc3 = nn.Linear(300, 200) 
+        self.fc4 = nn.Linear(200, num_classes)
+
     def sort_back_to_vec(self, inp):
         #zeros vector
         zrs = torch.zeros((batch_size, 200)).cuda()
@@ -67,15 +71,15 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         
         out = self.fc1(x)
-        out = out #* self.tks(out)
+        out = out * self.tks1(out)
         out = self.relu(out)
 
         out = self.fc2(out)
-        out = out #* self.tks(out) 
+        out = out * self.tks2(out) 
         out = self.relu(out)
 
         out = self.fc3(out)
-        out = out #* self.tks(out) 
+        out = out * self.tks3(out) 
         out = self.relu(out)
 
         out = self.fc4(out)
