@@ -73,7 +73,7 @@ class NeuralNet(nn.Module):
         return dsc_indx.float()
     def forward(self, x):
         
-        sparse = 1 - int(float(random.randint(1,10))/10.)
+        sparse = int(float(random.randint(1,10))/10.)
 
         out = self.fc1(x)
         out = self.relu(out)
