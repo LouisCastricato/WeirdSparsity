@@ -94,12 +94,12 @@ class SoftSort():
             raise ValueError("Need to run compute() first.")
 
     def compute(self):
-        size = len(self.values)
+        size = self.values.size(1)
         input_w = torch.flip(torch.arange(start=1, end=size + 1, step=1).cuda(), dims=[0])
 
         input_w = input_w / self.regularization_strength
         values = self.sign * self.values
-        self.permutation_ = torch.flip(torch.argsort(values), dims=[0])
+        self.permutation_ = torch.flip(torch.argsort(values), dims=[1])
         
         s = values[self.permutation_]
 
