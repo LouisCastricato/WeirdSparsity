@@ -67,15 +67,15 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         
         out = self.fc1(x)
-        out = out# * self.tks(out)
+        out = out * self.tks(out)
         out = self.relu(out)
 
         out = self.fc2(out)
-        out = out #* self.tks(out) 
+        out = out * self.tks(out) 
         out = self.relu(out)
 
         out = self.fc3(out)
-        out = out #* self.tks(out) 
+        out = out * self.tks(out) 
         out = self.relu(out)
 
         out = self.fc4(out)
