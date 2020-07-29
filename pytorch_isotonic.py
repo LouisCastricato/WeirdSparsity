@@ -41,17 +41,17 @@ def isotonic_l2(y, sol):
       y: input to isotonic regression, a 1d-array.
       sol: where to write the solution, an array of the same size as y.
     """
-    n = y.size(0)
-    target = torch.arange(n).cuda()
-    c = torch.ones(n).cuda()
-    sums = torch.zeros(n).cuda()
+    n = y.size(1)
+    target = torch.stack(list(map(torch.arange(n).cuda(), range(y.size(0))))).cuda()
+    c = torch.ones_like(y).cuda()
+    sums = torch.zeros_like(y).cuda()
 
     # target describes a list of blocks.  At any time, if [i..j] (inclusive) is
     # an active block, then target[i] := j and target[j] := i.
 
     for i in range(n):
-        sol[i] = y[i]
-        sums[i] = y[i]
+        sol[i] = y[:,i]
+        sums[i] = y[:,i]
 
     i = 0
     while i < n:
