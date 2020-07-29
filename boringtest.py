@@ -48,7 +48,7 @@ class NeuralNet(nn.Module):
         self.fc4 = nn.Linear(hidden_size, num_classes)  
     def sort_back_to_vec(self, inp):
         #zeros vector
-        zrs = inp.zeos_like()
+        zrs = inp.zeros_like()
         #Get the descending indexes
         dsc_indx = soft_rank(inp.view(batch_size, -1), "DESCENDING")
         #Scatter add back to the original array such that we have zeros everywhere else
