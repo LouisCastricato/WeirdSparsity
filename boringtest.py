@@ -10,7 +10,7 @@ from fast_soft_sort.numpy_ops import rank, sort
 from pytorch_soft_sort import soft_sort_pytorch
 import sys
 from tqdm import tqdm
-from entmax import entmax15
+from entmax import entmax15, sparsemax
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -65,15 +65,15 @@ class NeuralNet(nn.Module):
         
         out = self.fc1(x)
         out = self.relu(out)
-        out = out * entmax15(out) 
+        out = out * sparsemax(out) 
 
         out = self.fc2(out)
         out = self.relu(out)
-        out = out * entmax15(out) 
+        out = out * sparsemax(out) 
         
         out = self.fc3(out)
         out = self.relu(out)
-        out = out * entmax15(out) 
+        out = out * sparsemax(out) 
         
         out = self.fc4(out)
         
