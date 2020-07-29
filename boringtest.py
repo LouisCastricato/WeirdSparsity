@@ -11,7 +11,7 @@ from pytorch_soft_sort import soft_sort_pytorch
 import sys
 from tqdm import tqdm
 from entmax import entmax15, sparsemax
-from sinkhorn.topk import TopK_stablized
+from sinkhorn.topk import TopK_stablized, TopK_custom
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -48,7 +48,7 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size) 
         self.relu = nn.ReLU()
-        self.tks = TopK_stablized(400, max_iter=50)
+        self.tks = TopK_custom(400, max_iter=50)
 
         self.fc2 = nn.Linear(hidden_size, hidden_size) 
         self.fc3 = nn.Linear(hidden_size, hidden_size) 
@@ -67,15 +67,15 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         
         out = self.fc1(x)
-        out = out * self.tks(out)
+        out = out# * self.tks(out)
         out = self.relu(out)
 
         out = self.fc2(out)
-        out = out * self.tks(out) 
+        out = out #* self.tks(out) 
         out = self.relu(out)
 
         out = self.fc3(out)
-        out = out * self.tks(out) 
+        out = out #* self.tks(out) 
         out = self.relu(out)
 
         out = self.fc4(out)
