@@ -5,7 +5,7 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 
-from fast_soft_sort.pytorch_ops import soft_rank, soft_sort
+from fast_soft_sort.pytorch_ops import soft_rank, soft_sort, rank
 import sys
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -50,10 +50,12 @@ class NeuralNet(nn.Module):
         #zeros vector
         zrs = torch.zeros_like(inp)
         #Get the descending indexes
-        print(inp.size())
         dsc_indx = soft_rank(inp.view(batch_size, -1).cpu(), "DESCENDING").cuda()
+        indx = rank(inp.view(batch_size, -1).cpu(), "DESCENDING").cuda()
+
         print(inp)
         print(dsc_indx)
+        print(indx)
         #Scatter add back to the original array such that we have zeros everywhere else
         zrs.scatter_add_(-1, dsc_indx.long(), inp)
 
