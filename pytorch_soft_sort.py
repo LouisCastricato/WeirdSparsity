@@ -95,8 +95,11 @@ class SoftSort():
 
     def compute(self):
         size = self.values.size(1)
-        input_w = torch.flip(torch.arange(start=1, end=size + 1, step=1).cuda(), dims=[0])
-
+        input_w = torch.stack(list(map(\
+            torch.flip(torch.arange(start=1, end=size + 1, step=1).cuda(), dims=[0]),\
+                range(self.values.size(0)))))
+        print(input_w)
+        print(input_w.size())
         input_w = input_w / self.regularization_strength
         values = self.sign * self.values
         self.permutation_ = torch.flip(torch.argsort(values), dims=[1])
