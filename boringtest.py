@@ -59,7 +59,7 @@ class NeuralNet(nn.Module):
         #Get the descending indexes
         dsc_indx = soft_sort(inp.view(batch_size, -1).cpu(), "ASCENDING").cuda()
         _, indices = torch.sort(inp, descending=True)
-        dsc_indx = dsc_indx.narrow(-1, 100, 500)
+        dsc_indx = dsc_indx.narrow(-1, 100, 400)
         
         #Scatter add back to the original array such that we have zeros everywhere else
         #zrs.scatter_add_(-1, indices.long(), dsc_indx.float()).cuda()
