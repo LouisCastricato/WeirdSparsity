@@ -50,9 +50,9 @@ class NeuralNet(nn.Module):
         self.relu = nn.ReLU()
         self.tks = TopK_stablized(400, max_iter=50)
 
-        self.fc2 = nn.Linear(400, hidden_size) 
-        self.fc3 = nn.Linear(400, hidden_size) 
-        self.fc4 = nn.Linear(400, num_classes)  
+        self.fc2 = nn.Linear(hidden_size, hidden_size) 
+        self.fc3 = nn.Linear(hidden_size, hidden_size) 
+        self.fc4 = nn.Linear(hidden_size, num_classes)  
     def sort_back_to_vec(self, inp):
         #zeros vector
         zrs = torch.zeros((batch_size, 200)).cuda()
