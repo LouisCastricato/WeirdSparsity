@@ -50,16 +50,16 @@ class NeuralNet(nn.Module):
         self.relu = nn.ReLU()
         self.tks = TopK_stablized(200, max_iter=50)
 
-        self.fc2 = nn.Linear(hidden_size, hidden_size) 
-        self.fc3 = nn.Linear(hidden_size, hidden_size) 
-        self.fc4 = nn.Linear(hidden_size, num_classes)  
+        self.fc2 = nn.Linear(400, hidden_size) 
+        self.fc3 = nn.Linear(400, hidden_size) 
+        self.fc4 = nn.Linear(400, num_classes)  
     def sort_back_to_vec(self, inp):
         #zeros vector
         zrs = torch.zeros((batch_size, 200)).cuda()
         #Get the descending indexes
-        dsc_indx = soft_sort(inp.view(batch_size, -1).cpu(), "DESCENDING").cuda()
+        dsc_indx = soft_sort(inp.view(batch_size, -1).cpu(), "ASCENDING").cuda()
         _, indices = torch.sort(inp, descending=True)
-        dsc_indx = dsc_indx.narrow(-1, 0, 200)
+        dsc_indx = dsc_indx.narrow(-1, 100, 500)
         
         #Scatter add back to the original array such that we have zeros everywhere else
         #zrs.scatter_add_(-1, indices.long(), dsc_indx.float()).cuda()
@@ -67,15 +67,15 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         
         out = self.fc1(x)
-        out = out * self.tks(out)
+        out = out * self.sort_back_to_vec(out)
         out = self.relu(out)
 
         out = self.fc2(out)
-        out = out * self.tks(out) 
+        out = out * self.sort_back_to_vec(out) 
         out = self.relu(out)
 
         out = self.fc3(out)
-        out = out * self.tks(out) 
+        out = out * self.sort_back_to_vec(out) 
         out = self.relu(out)
 
         out = self.fc4(out)
