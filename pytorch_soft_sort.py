@@ -124,7 +124,7 @@ regularization="l2"
 def map_tensor(map_fn, tensor):
   return torch.stack([map_fn(tensor_i) for tensor_i in torch.unbind(tensor)])
 
-class soft_sort_pytorch(torch.autograd.Function):
+class SS_Func(torch.autograd.Function):
     @staticmethod
     def foward(ctx, values):
         ss = SoftSort(values, direction,\
@@ -139,5 +139,5 @@ class soft_sort_pytorch(torch.autograd.Function):
 
 def soft_sort_pytorch(values, direction="ASCENDING",\
     regularization_strength=1.0, regularization="l2"):
-    return map_tensor(soft_sort_pytorch.apply, values)
+    return map_tensor(SS_Func.apply, values)
 
