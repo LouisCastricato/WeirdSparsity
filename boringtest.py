@@ -6,8 +6,9 @@ import torchvision
 import torchvision.transforms as transforms
 
 from fast_soft_sort.pytorch_ops import soft_rank, soft_sort
-from fast_soft_sort.numpy_ops import rank
+from fast_soft_sort.numpy_ops import rank, sort
 import sys
+from tqdm import tqdm
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -44,35 +45,36 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size) 
         self.relu = nn.ReLU()
-        self.fc2 = nn.Linear(hidden_size, hidden_size) 
-        self.fc3 = nn.Linear(hidden_size, hidden_size) 
-        self.fc4 = nn.Linear(hidden_size, num_classes)  
+        self.fc2 = nn.Linear(200, hidden_size) 
+        self.fc3 = nn.Linear(200, hidden_size) 
+        self.fc4 = nn.Linear(200, num_classes)  
     def sort_back_to_vec(self, inp):
         #zeros vector
-        zrs = torch.zeros_like(inp)
+        zrs = torch.zeros((batch_size, 200)).cuda()
         #Get the descending indexes
-        dsc_indx = soft_rank(inp.view(batch_size, -1).cpu(), "DESCENDING").cuda()
-        indx = rank(inp.view(batch_size, -1).cpu().detach().numpy()[0], "DESCENDING")
-
-        print(inp)
-        print(dsc_indx)
-        print(indx)
+        dsc_indx = soft_sort(inp.view(batch_size, -1).cpu(), "DESCENDING").cuda()
+        _, indices = torch.sort(inp, descending=True)
+        dsc_indx = dsc_indx.narrow(-1, 0, 200)
+        
         #Scatter add back to the original array such that we have zeros everywhere else
-        zrs.scatter_add_(-1, dsc_indx.long(), inp)
-
-        print(zrs)
-        sys.exit()
-        return zrs
+        #zrs.scatter_add_(-1, indices.long(), dsc_indx.float()).cuda()
+        return dsc_indx.float()
     def forward(self, x):
+        
         out = self.fc1(x)
         out = self.relu(out)
-        self.sort_back_to_vec(out)
+        out= self.sort_back_to_vec(out)
 
         out = self.fc2(out)
         out = self.relu(out)
+        out= self.sort_back_to_vec(out)
+        
         out = self.fc3(out)
         out = self.relu(out)
+        out= self.sort_back_to_vec(out)
+        
         out = self.fc4(out)
+        
         return out
 
 model = NeuralNet(input_size, hidden_size, num_classes).to(device)
@@ -83,7 +85,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
 # Train the model
 total_step = len(train_loader)
-for epoch in range(num_epochs):
+for epoch in tqdm(range(num_epochs)):
     for i, (images, labels) in enumerate(train_loader):  
         # Move tensors to the configured device
         images = images.reshape(-1, 28*28).to(device)
