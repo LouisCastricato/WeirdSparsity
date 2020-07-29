@@ -22,8 +22,13 @@ https://arxiv.org/abs/2002.08871
 from . import numpy_ops
 import torch
 
-import multiprocessing
-pool = multiprocessing.Pool()
+from torch.multiprocessing import Pool, Process, set_start_method
+try:
+     set_start_method('spawn')
+except RuntimeError:
+    pass
+
+pool = torch.multiprocessing.Pool()
 
 def wrap_class(cls, **kwargs):
   """Wraps the given NumpyOp in a torch Function."""
