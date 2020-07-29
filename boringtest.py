@@ -47,7 +47,7 @@ class NeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
         super(NeuralNet, self).__init__()
         self.fc1 = nn.Linear(input_size, 400) 
-        self.relu = nn.ReLU()
+        self.sigmoid = nn.Sigmoid()
 
         self.tks1 = TopK_custom(400, max_iter=50)
         self.tks2 = TopK_custom(250, max_iter=50)
@@ -71,16 +71,16 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         
         out = self.fc1(x)
-        out = self.relu(out)
+        out = self.sigmoid(out)
         out = out * self.tks1(out)
 
         out = self.fc2(out)
         out = out # * self.tks2(out) 
-        out = self.relu(out)
+        out = self.sigmoid(out)
 
         out = self.fc3(out)
         out = out #* self.tks3(out) 
-        out = self.relu(out)
+        out = self.sigmoid(out)
 
         out = self.fc4(out)
         
