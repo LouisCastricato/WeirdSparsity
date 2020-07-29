@@ -48,17 +48,17 @@ test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
 class NeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
         super(NeuralNet, self).__init__()
-        self.fc1 = nn.Linear(input_size, 400) 
+        self.fc1 = nn.Linear(input_size, hidden_size) 
         self.relu = nn.ReLU()
 
         self.tks0 = TopK_custom(600, max_iter=50)
-        self.tks1 = TopK_custom(350, max_iter=50)
-        self.tks2 = TopK_custom(250, max_iter=50)
-        self.tks3 = TopK_custom(150, max_iter=50)
+        self.tks1 = TopK_custom(400, max_iter=50)
+        self.tks2 = TopK_custom(400, max_iter=50)
+        self.tks3 = TopK_custom(400, max_iter=50)
 
-        self.fc2 = nn.Linear(400, 300) 
-        self.fc3 = nn.Linear(300, 200) 
-        self.fc4 = nn.Linear(200, num_classes)
+        self.fc2 = nn.Linear(hidden_size, 300) 
+        self.fc3 = nn.Linear(hidden_size, 200) 
+        self.fc4 = nn.Linear(hidden_size, num_classes)
 
     def sort_back_to_vec(self, inp):
         #zeros vector
