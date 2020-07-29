@@ -22,6 +22,8 @@ https://arxiv.org/abs/2002.08871
 from . import numpy_ops
 import torch
 
+import multiprocessing
+pool = multiprocessing.Pool()
 
 def wrap_class(cls, **kwargs):
   """Wraps the given NumpyOp in a torch Function."""
@@ -43,7 +45,7 @@ def wrap_class(cls, **kwargs):
 
 
 def map_tensor(map_fn, tensor):
-  return torch.stack([map_fn(tensor_i) for tensor_i in torch.unbind(tensor)])
+  return torch.stack(list(pool.map(map_fn, torch.unbind(tensor))))
 
 
 def soft_rank(values, direction="ASCENDING", regularization_strength=1.0,

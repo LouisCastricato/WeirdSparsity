@@ -43,7 +43,7 @@ def isotonic_l2(y, sol):
     """
 
     n = y.size(1)
-    target = torch.stack(list(map(torch.arange(n).cuda(), range(y.size(0))))).cuda()
+    target = torch.stack(list(map(lambda x: torch.arange(n).cuda(), range(y.size(0))))).cuda()
     c = torch.ones_like(y).cuda()
     sums = torch.zeros_like(y).cuda()
 

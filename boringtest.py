@@ -53,10 +53,8 @@ class NeuralNet(nn.Module):
         #zeros vector
         zrs = torch.zeros((batch_size, 200)).cuda()
         #Get the descending indexes
-        dsc_indx = soft_sort_pytorch(inp.view(batch_size, -1))
+        dsc_indx = soft_sort(inp.view(batch_size, -1).cpu(), "DESCENDING").cuda()
         _, indices = torch.sort(inp, descending=True)
-        print(dsc_indx)
-        sys.exit()
         dsc_indx = dsc_indx.narrow(-1, 0, 200)
         
         #Scatter add back to the original array such that we have zeros everywhere else
