@@ -43,6 +43,24 @@ def wrap_class(cls, **kwargs):
 
   return NumpyOpWrapper
 
+direction="DESCENDING"
+regularization_strength=1.0
+regularization="l2"
+
+class SS_Wrapper(torch.autograd.Function):
+  """A torch Function wrapping a NumpyOp."""
+
+  @staticmethod
+  def forward(ctx, values):
+    obj = numpy_ops.SoftSort(values.detach().numpy(),\
+      direction, regularization_strength, regularization)
+    ctx.numpy_obj = obj
+    return torch.from_numpy(obj.compute())
+
+  @staticmethod
+  def backward(ctx, grad_output):
+    return torch.from_numpy(ctx.numpy_obj.vjp(grad_output.numpy()))
+
 
 def map_tensor(map_fn, tensor):
   return torch.stack(list(pool.map(map_fn, torch.unbind(tensor))))
@@ -97,9 +115,4 @@ def soft_sort(values, direction="ASCENDING",
     raise ValueError("'values' should be a 2d-tensor "
                      "but got %s." % str(values.shape))
 
-  wrapped_fn = wrap_class(numpy_ops.SoftSort,
-                          regularization_strength=regularization_strength,
-                          direction=direction,
-                          regularization=regularization)
-
-  return map_tensor(wrapped_fn.apply, values)
+  return map_tensor(SS_Wrapper.apply, values)
