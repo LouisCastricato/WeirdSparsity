@@ -48,7 +48,7 @@ class NeuralNet(nn.Module):
         super(NeuralNet, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size) 
         self.relu = nn.ReLU()
-        self.tks = TopK_stablized(200, max_iter=50)
+        self.tks = TopK_stablized(400, max_iter=50)
 
         self.fc2 = nn.Linear(400, hidden_size) 
         self.fc3 = nn.Linear(400, hidden_size) 
@@ -67,15 +67,15 @@ class NeuralNet(nn.Module):
     def forward(self, x):
         
         out = self.fc1(x)
-        out = self.sort_back_to_vec(out)
+        out = out * self.tks(out)
         out = self.relu(out)
 
         out = self.fc2(out)
-        out = self.sort_back_to_vec(out) 
+        out = out * self.tks(out) 
         out = self.relu(out)
 
         out = self.fc3(out)
-        out = self.sort_back_to_vec(out) 
+        out = out * self.tks(out) 
         out = self.relu(out)
 
         out = self.fc4(out)
