@@ -79,7 +79,7 @@ class SoftSort():
 
     def __init__(self, values, direction="ASCENDING",
                  regularization_strength=1.0, regularization="l2"):
-        self.values = torch.from_numpy(np.asarray(values)).cuda()
+        self.values = values
         self.sign = 1 if direction == "DESCENDING" else -1
         self.regularization_strength = regularization_strength
         _check_regularization(regularization)
