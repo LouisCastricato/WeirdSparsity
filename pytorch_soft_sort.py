@@ -126,7 +126,7 @@ def map_tensor(map_fn, tensor):
 
 class SS_Func(torch.autograd.Function):
     @staticmethod
-    def foward(ctx, values):
+    def forward(ctx, values):
         ss = SoftSort(values, direction,\
             regularization_strength, regularization)
         ctx.ss = ss
