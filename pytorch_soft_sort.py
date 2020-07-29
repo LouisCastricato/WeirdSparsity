@@ -96,10 +96,12 @@ class SoftSort():
     def compute(self):
         size = len(self.values)
         print(size)
-        input_w = torch.arange(start=1, end=size + 1, step=1)
-        input_w = input_w[::-1] / self.regularization_strength
+        input_w = torch.flip(torch.arange(start=1, end=size + 1, step=1))
+
+        input_w = input_w / self.regularization_strength
         values = self.sign * self.values
-        self.permutation_ = torch.argsort(values)[::-1]
+        self.permutation_ = torch.flip(torch.argsort(values))
+        
         s = values[self.permutation_]
 
         self.isotonic_ = Isotonic(
