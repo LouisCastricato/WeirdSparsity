@@ -95,6 +95,7 @@ class SoftSort():
 
     def compute(self):
         size = len(self.values)
+        print(size)
         input_w = torch.arange(
             1, size + 1)[::-1] / self.regularization_strength
         values = self.sign * self.values
