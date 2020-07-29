@@ -47,11 +47,10 @@ class NeuralNet(nn.Module):
         self.fc3 = nn.Linear(hidden_size, hidden_size) 
         self.fc4 = nn.Linear(hidden_size, num_classes)  
     def sort_back_to_vec(self, inp):
-        inp.cuda()
         #zeros vector
         zrs = torch.zeros_like(inp)
         #Get the descending indexes
-        dsc_indx = soft_rank(inp.view(batch_size, -1), "DESCENDING")
+        dsc_indx = soft_rank(inp.view(batch_size, -1).cpu(), "DESCENDING").cuda()
         #Scatter add back to the original array such that we have zeros everywhere else
         zrs.scatter_add_(-1, dsc_indx, inp)
 
