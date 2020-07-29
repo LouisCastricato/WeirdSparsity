@@ -68,7 +68,7 @@ class SS_Wrapper(torch.autograd.Function):
 
 
 def map_tensor(map_fn, tensor):
-  return torch.stack(list(pool.map(map_fn, torch.unbind(tensor))))
+  return torch.stack([map_fn(tensor_i) for tensor_i in torch.unbind(tensor)])
 
 
 def soft_rank(values, direction="ASCENDING", regularization_strength=1.0,
@@ -102,10 +102,8 @@ def soft_rank(values, direction="ASCENDING", regularization_strength=1.0,
 def soft_sort(values, direction="ASCENDING",
               regularization_strength=1.0, regularization="l2"):
   r"""Soft sort the given values (tensor) along the second axis.
-
   The regularization strength determines how close are the returned values
   to the actual sorted values.
-
   Args:
     values: A 2d-tensor holding the numbers to be sorted.
     direction: Either 'ASCENDING' or 'DESCENDING'.
@@ -120,4 +118,9 @@ def soft_sort(values, direction="ASCENDING",
     raise ValueError("'values' should be a 2d-tensor "
                      "but got %s." % str(values.shape))
 
-  return map_tensor(SS_Wrapper.apply, values)
+  wrapped_fn = wrap_class(numpy_ops.SoftSort,
+                          regularization_strength=regularization_strength,
+                          direction=direction,
+                          regularization=regularization)
+
+  return map_tensor(wrapped_fn.apply, values)
