@@ -5,7 +5,7 @@ import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
 
-from fast_soft_sort.pytorch_ops import soft_rank
+from fast_soft_sort.pytorch_ops import soft_rank, soft_sort
 import sys
 # Device configuration
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
