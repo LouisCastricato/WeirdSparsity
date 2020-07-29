@@ -52,7 +52,7 @@ class NeuralNet(nn.Module):
         zrs = torch.zeros_like(inp)
         #Get the descending indexes
         dsc_indx = soft_rank(inp.view(batch_size, -1).cpu(), "DESCENDING").cuda()
-        indx = rank(inp.view(batch_size, -1).cpu().detach().numpy(), "DESCENDING").cuda()
+        indx = rank(inp.view(batch_size, -1).cpu().detach().numpy()[0], "DESCENDING").cuda()
 
         print(inp)
         print(dsc_indx)
