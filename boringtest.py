@@ -116,11 +116,11 @@ class Net(nn.Module):
         x = x.view(-1, 16 * 5 * 5)
 
         x = self.relu(self.fc1(x))
-        x = sparse * self.tks1(x) + (1-sparse) * x
+        #x = sparse * self.tks1(x) + (1-sparse) * x
 
         x = self.relu(self.fc2(x))
-        x = sparse * self.tks2(x) + (1-sparse) * x
-        
+        #x = sparse * self.tks2(x) + (1-sparse) * x
+
         x = self.fc3(x)
         return x
 
