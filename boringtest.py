@@ -103,7 +103,7 @@ class Net(nn.Module):
         self.fc2 = torch.nn.Linear(120, 84)
         self.fc3 = torch.nn.Linear(84, 10)
 
-        self.tks1 = TopK_custom(110, max_iter=50)
+        self.tks1 = TopK_custom(95, max_iter=50)
         self.tks2 = TopK_custom(75, max_iter=50)
         self.relu = nn.ReLU()
 
