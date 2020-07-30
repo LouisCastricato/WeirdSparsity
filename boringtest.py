@@ -147,7 +147,7 @@ def test():
         correct = 0
         total = 0
         for images, labels in test_loader:
-            images = images.to(device)
+            images = images.reshape(batch_size, -1).to(device)
             labels = labels.to(device)
             outputs = model(images, True)
             _, predicted = torch.max(outputs.data, 1)
@@ -158,7 +158,7 @@ def test():
 for epoch in tqdm(range(num_epochs)):
     for i, (images, labels) in enumerate(train_loader):  
         # Move tensors to the configured device
-        images = images.to(device)
+        images = images.reshape(batch_size, -1).to(device)
         labels = labels.to(device)
         
         # Forward pass
