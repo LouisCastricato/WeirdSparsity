@@ -132,7 +132,7 @@ model = Net().to(device)
 
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)  
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)  
 
 # Train the model
 total_step = len(train_loader)
