@@ -48,7 +48,7 @@ test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
 class NeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
         super(NeuralNet, self).__init__()
-        self.fc1 = nn.Linear(input_size, hidden_size) 
+        self.fc1 = nn.Linear(input_size*3, hidden_size) 
         self.relu = nn.ReLU()
 
         self.tks0 = TopK_custom(600, max_iter=50)
