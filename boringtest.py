@@ -24,7 +24,7 @@ num_classes = 10
 num_epochs = 40
 batch_size = 100
 learning_rate = 0.05
-n = 10
+n = 5
 # MNIST dataset 
 train_dataset = torchvision.datasets.CIFAR10(root='../../data', 
                                            train=True, 
@@ -72,9 +72,11 @@ class NeuralNet(nn.Module):
         #Scatter add back to the original array such that we have zeros everywhere else
         #zrs.scatter_add_(-1, indices.long(), dsc_indx.float()).cuda()
         return dsc_indx.float()
-    def forward(self, x):
+    def forward(self, x, test=False):
         
         sparse = int(float(random.randint(1,n))/float(n))
+        if test:
+            sparse = 0
 
         out = self.fc1(x)
         out = self.relu(out)
@@ -85,11 +87,11 @@ class NeuralNet(nn.Module):
 
         out = self.fc3(out)
         out = self.relu(out)
-        #out = out * sparse * self.tks3(out) + (1-sparse) * out
+        out = out * sparse * self.tks3(out) + (1-sparse) * out
 
         out = self.fc4(out)
         out = self.relu(out)
-        #out = out * sparse * self.tks4(out) + (1-sparse) * out
+        out = out * sparse * self.tks4(out) + (1-sparse) * out
         
         return self.fc5(out)
 
@@ -129,7 +131,7 @@ class Net(nn.Module):
 
 net = Net()
 model = NeuralNet(input_size, hidden_size, num_classes).to(device)
-model = Net().to(device)
+#model = Net().to(device)
 
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()
