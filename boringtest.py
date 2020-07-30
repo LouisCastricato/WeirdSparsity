@@ -22,7 +22,7 @@ input_size = 1024
 hidden_size = 500
 num_classes = 10
 num_epochs = 10
-batch_size = 300
+batch_size = 100
 learning_rate = 0.001
 
 # MNIST dataset 
@@ -102,7 +102,7 @@ total_step = len(train_loader)
 for epoch in tqdm(range(num_epochs)):
     for i, (images, labels) in enumerate(train_loader):  
         # Move tensors to the configured device
-        images = images.reshape(-1, 32*32).to(device)
+        images = images.reshape(batch_size, -1).to(device)
         labels = labels.to(device)
         
         # Forward pass
