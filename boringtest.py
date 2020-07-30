@@ -108,7 +108,7 @@ class Net(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, x):
-        sparse =1.# int(float(random.randint(1,2))/2.)
+        sparse = int(float(random.randint(1,2))/2.)
 
 
 
