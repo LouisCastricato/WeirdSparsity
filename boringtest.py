@@ -22,7 +22,7 @@ input_size = 1024
 hidden_size = 500
 num_classes = 10
 num_epochs = 10
-batch_size = 100
+batch_size = 300
 learning_rate = 0.001
 
 # MNIST dataset 
