@@ -18,7 +18,7 @@ import random
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Hyper-parameters 
-input_size = 784
+input_size = 1024
 hidden_size = 500
 num_classes = 10
 num_epochs = 10
@@ -26,12 +26,12 @@ batch_size = 100
 learning_rate = 0.001
 
 # MNIST dataset 
-train_dataset = torchvision.datasets.MNIST(root='../../data', 
+train_dataset = torchvision.datasets.CIFAR10(root='../../data', 
                                            train=True, 
                                            transform=transforms.ToTensor(),  
                                            download=True)
 
-test_dataset = torchvision.datasets.MNIST(root='../../data', 
+test_dataset = torchvision.datasets.CIFAR10(root='../../data', 
                                           train=False, 
                                           transform=transforms.ToTensor())
 
