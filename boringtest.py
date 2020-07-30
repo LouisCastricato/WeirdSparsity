@@ -103,12 +103,12 @@ class Net(nn.Module):
         self.fc2 = torch.nn.Linear(200, 84)
         self.fc3 = torch.nn.Linear(84, 10)
 
-        self.tks1 = TopK_custom(120, max_iter=200)
+        self.tks1 = TopK_custom(120, max_iter=100)
         self.tks2 = TopK_custom(75, max_iter=50)
         self.relu = nn.ReLU()
 
     def forward(self, x):
-        sparse = int(float(random.randint(1,10))/10.)
+        sparse = int(float(random.randint(1,2))/2.)
 
 
         x = self.pool(self.relu(self.conv1(x)))
