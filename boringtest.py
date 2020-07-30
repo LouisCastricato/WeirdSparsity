@@ -85,11 +85,11 @@ class NeuralNet(nn.Module):
 
         out = self.fc3(out)
         out = self.relu(out)
-        out = out * sparse * self.tks3(out) + (1-sparse) * out
+        #out = out * sparse * self.tks3(out) + (1-sparse) * out
 
         out = self.fc4(out)
         out = self.relu(out)
-        out = out * sparse * self.tks4(out) + (1-sparse) * out
+        #out = out * sparse * self.tks4(out) + (1-sparse) * out
         
         return self.fc5(out)
 
