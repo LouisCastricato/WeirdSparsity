@@ -99,11 +99,11 @@ class Net(nn.Module):
         self.conv1 = torch.nn.Conv2d(3, 6, 5)
         self.pool = torch.nn.MaxPool2d(2, 2)
         self.conv2 = torch.nn.Conv2d(6, 16, 5)
-        self.fc1 = torch.nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = torch.nn.Linear(120, 84)
+        self.fc1 = torch.nn.Linear(16 * 5 * 5, 200)
+        self.fc2 = torch.nn.Linear(200, 84)
         self.fc3 = torch.nn.Linear(84, 10)
 
-        self.tks1 = TopK_custom(95, max_iter=50)
+        self.tks1 = TopK_custom(160, max_iter=50)
         self.tks2 = TopK_custom(75, max_iter=50)
         self.relu = nn.ReLU()
 
