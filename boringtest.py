@@ -107,9 +107,10 @@ class Net(nn.Module):
         self.tks2 = TopK_custom(75, max_iter=50)
         self.relu = nn.ReLU()
 
-    def forward(self, x):
+    def forward(self, x, test = False):
         sparse = int(float(random.randint(1,n))/float(n))
-
+        if test:
+            sparse = 0
 
 
         x = self.pool(self.relu(self.conv1(x)))
@@ -146,7 +147,7 @@ def test():
         for images, labels in test_loader:
             images = images.to(device)
             labels = labels.to(device)
-            outputs = model(images)
+            outputs = model(images, True)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
