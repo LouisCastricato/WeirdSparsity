@@ -23,7 +23,7 @@ hidden_size = 500
 num_classes = 10
 num_epochs = 40
 batch_size = 100
-learning_rate = 0.1
+learning_rate = 0.05
 n = 2
 # MNIST dataset 
 train_dataset = torchvision.datasets.CIFAR10(root='../../data', 
