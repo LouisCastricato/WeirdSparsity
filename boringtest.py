@@ -24,7 +24,7 @@ num_classes = 10
 num_epochs = 40
 batch_size = 100
 learning_rate = 0.1
-
+n = 2
 # MNIST dataset 
 train_dataset = torchvision.datasets.CIFAR10(root='../../data', 
                                            train=True, 
@@ -74,7 +74,7 @@ class NeuralNet(nn.Module):
         return dsc_indx.float()
     def forward(self, x):
         
-        sparse = int(float(random.randint(1,10))/10.)
+        sparse = int(float(random.randint(1,n))/float(n))
 
         out = self.fc1(x)
         out = self.relu(out)
@@ -108,7 +108,7 @@ class Net(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, x):
-        sparse = int(float(random.randint(1,10))/10.)
+        sparse = int(float(random.randint(1,n))/float(n))
 
 
 
