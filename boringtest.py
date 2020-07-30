@@ -51,14 +51,15 @@ class NeuralNet(nn.Module):
         self.fc1 = nn.Linear(input_size*3, hidden_size) 
         self.relu = nn.ReLU()
 
-        self.tks0 = TopK_custom(600, max_iter=50)
-        self.tks1 = TopK_custom(400, max_iter=50)
-        self.tks2 = TopK_custom(400, max_iter=50)
+        #self.tks0 = TopK_custom(600, max_iter=50)
+        #self.tks1 = TopK_custom(400, max_iter=50)
         self.tks3 = TopK_custom(400, max_iter=50)
+        self.tks4 = TopK_custom(400, max_iter=50)
 
         self.fc2 = nn.Linear(hidden_size, hidden_size) 
         self.fc3 = nn.Linear(hidden_size, hidden_size) 
-        self.fc4 = nn.Linear(hidden_size, num_classes)
+        self.fc4 = nn.Linear(hidden_size, hidden_size)
+        self.fc5 = nn.Linear(hidden_size, num_classes)
 
     def sort_back_to_vec(self, inp):
         #zeros vector
@@ -77,19 +78,20 @@ class NeuralNet(nn.Module):
 
         out = self.fc1(x)
         out = self.relu(out)
-        out = out * sparse * self.tks1(out) + (1-sparse) * out
+        out = out #* sparse * self.tks1(out) + (1-sparse) * out
 
         out = self.fc2(out)
         out = self.relu(out)
-        out = out * sparse * self.tks2(out) + (1-sparse) * out
 
         out = self.fc3(out)
         out = self.relu(out)
         out = out * sparse * self.tks3(out) + (1-sparse) * out
 
         out = self.fc4(out)
+        out = self.relu(out)
+        out = out * sparse * self.tks4(out) + (1-sparse) * out
         
-        return out
+        return self.fc5(out)
 
 model = NeuralNet(input_size, hidden_size, num_classes).to(device)
 
@@ -124,7 +126,7 @@ with torch.no_grad():
     correct = 0
     total = 0
     for images, labels in test_loader:
-        images = images.reshape(-1, 32*32).to(device)
+        images = images.reshape(batch_size, -1).to(device)
         labels = labels.to(device)
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
