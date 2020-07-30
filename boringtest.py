@@ -105,13 +105,14 @@ class Net(nn.Module):
 
         self.tks1 = TopK_custom(110, max_iter=50)
         self.tks2 = TopK_custom(75, max_iter=50)
+        self.relu = nn.ReLU()
 
     def forward(self, x):
-        x = self.pool(torch.F.relu(self.conv1(x)))
-        x = self.pool(torch.F.relu(self.conv2(x)))
+        x = self.pool(self.relu(self.conv1(x)))
+        x = self.pool(self.relu(self.conv2(x)))
         x = x.view(-1, 16 * 5 * 5)
-        x = self.tks1(torch.F.relu(self.fc1(x)))
-        x = self.tks2(torch.F.relu(self.fc2(x)))
+        x = self.tks1(self.relu(self.fc1(x)))
+        x = self.tks2(self.relu(self.fc2(x)))
         x = self.fc3(x)
         return x
 
