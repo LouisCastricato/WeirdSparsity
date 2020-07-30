@@ -136,6 +136,22 @@ optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 # Train the model
 total_step = len(train_loader)
+
+def test():
+    # Test the model
+    # In test phase, we don't need to compute gradients (for memory efficiency)
+    with torch.no_grad():
+        correct = 0
+        total = 0
+        for images, labels in test_loader:
+            images = images.to(device)
+            labels = labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    print('Accuracy of the network on the 10000 test images: {} %'.format(100 * correct / total))
+
 for epoch in tqdm(range(num_epochs)):
     for i, (images, labels) in enumerate(train_loader):  
         # Move tensors to the configured device
@@ -155,20 +171,8 @@ for epoch in tqdm(range(num_epochs)):
             print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
                    .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
 
-# Test the model
-# In test phase, we don't need to compute gradients (for memory efficiency)
-with torch.no_grad():
-    correct = 0
-    total = 0
-    for images, labels in test_loader:
-        images = images.to(device)
-        labels = labels.to(device)
-        outputs = model(images)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
+    test()
 
-    print('Accuracy of the network on the 10000 test images: {} %'.format(100 * correct / total))
 
 # Save the model checkpoint
 torch.save(model.state_dict(), 'model.ckpt')
