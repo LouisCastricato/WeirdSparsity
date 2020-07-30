@@ -102,7 +102,7 @@ total_step = len(train_loader)
 for epoch in tqdm(range(num_epochs)):
     for i, (images, labels) in enumerate(train_loader):  
         # Move tensors to the configured device
-        images = images.reshape(-1, 28*28).to(device)
+        images = images.reshape(-1, 32*32).to(device)
         labels = labels.to(device)
         
         # Forward pass
@@ -124,7 +124,7 @@ with torch.no_grad():
     correct = 0
     total = 0
     for images, labels in test_loader:
-        images = images.reshape(-1, 28*28).to(device)
+        images = images.reshape(-1, 32*32).to(device)
         labels = labels.to(device)
         outputs = model(images)
         _, predicted = torch.max(outputs.data, 1)
