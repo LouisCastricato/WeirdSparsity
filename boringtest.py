@@ -22,7 +22,7 @@ input_size = 1024
 hidden_size = 500
 num_classes = 10
 num_epochs = 20
-batch_size = 100
+batch_size = 25
 learning_rate = 0.001
 
 # MNIST dataset 
@@ -109,7 +109,7 @@ class Net(nn.Module):
 
     def forward(self, x):
         sparse =1.# int(float(random.randint(1,2))/2.)
-        
+
 
 
         x = self.pool(self.relu(self.conv1(x)))
